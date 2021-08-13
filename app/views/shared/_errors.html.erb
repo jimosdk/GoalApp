@@ -1,4 +1,4 @@
-<% unless flash.now[:errors].empty? %>
+<% if flash.now[:errors] %>
 <p>Error</p>
 <ul>
 <% flash.now[:errors].each do |error| %>

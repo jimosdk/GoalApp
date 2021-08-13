@@ -1,4 +1,4 @@
-<% unless flash.now[:notice].empty? %>
+<% if flash.now[:notice] %>
 <p>Notice</p>
 <ul>
 <% flash.now[:notice].each do |notice| %>
