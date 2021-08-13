@@ -23,7 +23,7 @@ class User < ApplicationRecord
 
     after_initialize :ensure_session_token
 
-    
+    has_many :goals
 
     def self.find_by_credentials(name,password)
         user = User.find_by(name: name)

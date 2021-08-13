@@ -26,6 +26,8 @@ RSpec.describe User, type: :model do
 
   it {should validate_uniqueness_of(:session_token)}
 
+  it {should have_many(:goals)}
+
   describe "#password=" do
     it 'it sets the password' do
       expect(user.instance_variable_get(:@password)).to_not be_nil
