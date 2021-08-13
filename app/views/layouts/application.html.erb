@@ -10,6 +10,15 @@
   </head>
 
   <body>
+    <nav>
+      <h1>Goal App</h1>
+      <% if current_user %>
+        <p><%= link_to current_user.name, user_url(current_user) %></p>
+        <%= button_to 'Log out', session_url,method: :delete %>
+      <% else %>
+        <p><%= link_to 'Sign in', new_session_url %>/ <%= link_to 'Sign up',new_user_url %></p>
+      <% end %>
+    </nav>
     <%= yield %>
   </body>
 </html>
