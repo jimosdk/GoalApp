@@ -93,7 +93,7 @@ RSpec.describe GoalsController, type: :controller do
       it "redirects to the created goal's show page" do
         allow_any_instance_of(ApplicationController).
         to receive(:current_user).and_return(user)
-        patch :update,params:{id: Goal.find_by(title:'MyGoal').id,goal:{title:"MyGoal",description:"bla"}}
+        patch :update,params:{id: Goal.find_by(title:'MyGoal').id,goal:{title:"MyGoal",description:"ba"}}
         expect(response).to redirect_to goal_url(Goal.find_by(title:'MyGoal'))
       end
     end
@@ -102,7 +102,7 @@ RSpec.describe GoalsController, type: :controller do
       it "re-renders the new template" do 
         allow_any_instance_of(ApplicationController).
         to receive(:current_user).and_return(user)
-        patch :update,params:{id: Goal.find_by(title:'MyGoal').id,goal:{title:"",description:"bla"}}
+        patch :update,params:{id: Goal.find_by(title:'MyGoal').id,goal:{title:"",description:"ba"}}
         expect(response).to render_template(:edit)
         expect(flash[:errors]).to_not be_nil
       end
@@ -110,7 +110,7 @@ RSpec.describe GoalsController, type: :controller do
 
     context "when the user is not signed in" do
       it "redirects to sign in page" do
-        patch :update,params:{id: Goal.find_by(title:'MyGoal').id,goal:{title:"MyGoal",description:"bla"}}
+        patch :update,params:{id: Goal.find_by(title:'MyGoal').id,goal:{title:"MyGoal",description:"ba"}}
         expect(response).to redirect_to(new_session_url)
       end
     end
@@ -118,14 +118,43 @@ RSpec.describe GoalsController, type: :controller do
 
   describe "GET #show" do
     let(:user) {User.create(name:'John',password:'123456')}
+    let(:user2) {User.create(name:'Jim',password:'123456')}
     let(:goal) {Goal.create(title:'MyGoal',description:'bla',user_id:user.id)}
+    let(:goal2) {Goal.create(title:'MyGoal',description:'bla',user_id:user2.id,private: true)}
     before(:each) do
       user.reload
+      user2.reload
       goal.reload
+      goal2.reload
     end
     it "renders the show template" do
-      get :show, params:{id: Goal.find_by(title:'MyGoal').id,goal:{title:"MyGoal",description:"bla"}}
+      get :show, params:{id: Goal.find_by(user_id: user.id).id}
       expect(response).to render_template(:show)
+    end
+
+    context "If an unsigned user is trying to access a private goal of another user" do 
+      it "redirects to the other users show page" do
+        get :show, params:{id: Goal.find_by(user_id: user2.id).id}
+        expect(response).to redirect_to(user_url(user2.id))
+      end
+    end
+
+    context "If a signed user is trying to access a private goal of another user" do 
+      it "redirects to the other users show page" do
+        allow_any_instance_of(ApplicationController).
+        to receive(:current_user).and_return(user)
+        get :show, params:{id: Goal.find_by(user_id: user2.id).id}
+        expect(response).to redirect_to(user_url(user2.id))
+      end
+    end
+
+    context "If a signed user is trying to access his own private goal" do 
+      it "renders the goals show page" do
+        allow_any_instance_of(ApplicationController).
+        to receive(:current_user).and_return(user2)
+        get :show, params:{id: Goal.find_by(user_id: user2.id).id}
+        expect(response).to render_template(:show)
+      end
     end
   end
 

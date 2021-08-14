@@ -1,5 +1,6 @@
 class GoalsController < ApplicationController
   before_action :require_current_user,except:[:show]
+  before_action :private?,only: [:show]
   def new
     @goal = Goal.new
     render :new
@@ -41,5 +42,10 @@ class GoalsController < ApplicationController
 
   def goal_params
     params.require(:goal).permit(:title,:description,:private,:completed)
+  end
+
+  def private?
+    @goal = Goal.find_by(id: params[:id])
+    redirect_to user_url(@goal.user_id) if @goal.private && !current_user || (current_user && current_user.id != @goal.user_id)
   end
 end
