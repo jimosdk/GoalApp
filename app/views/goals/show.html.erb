@@ -1,0 +1,42 @@
+<h1><%= @goal.title %></h1>
+
+<table>
+    <tr>
+        <th>Author</th>
+        <td><%= @goal.user.name %></td>
+    </tr>
+    <tr>
+        <th>Visibility</th>
+        <td><%= @goal.private ? 'Private' : 'Public' %></td>
+    </tr>
+    <tr>
+        <th>Finished?</th>
+        <td><%= @goal.completed ? 'Completed' : 'Ongoing' %></td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td><%= @goal.description%></td>
+    </tr>
+    <% if current_user && current_user.id == @goal.user_id %>
+        <th>Complete?</th>
+        <td>
+        <% if @goal.completed %>
+            <%= button_to 'Not completed yet', complete_goal_url(@goal),method: :patch %>
+        <% else %>
+            <%= button_to 'Complete', complete_goal_url(@goal),method: :patch %>
+        <% end %>
+        </td>
+    <% end %>
+</table>
+
+<br>
+
+<% if current_user && current_user.id == @goal.user_id %>
+<%= link_to 'Edit', edit_goal_url(@goal) %>
+<%= button_to 'Remove', goal_url(@goal), method: :delete %>
+<% end %>
+
+<br>
+
+<%= link_to 'Back', user_url(@goal.user_id) %>
+

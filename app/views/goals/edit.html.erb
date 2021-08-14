@@ -1,0 +1,48 @@
+<h1>Edit <%= @goal.user.name %>'s Goal</h1>
+
+<%= render 'shared/errors' %>
+<%= render 'shared/notices' %>
+
+<form action="<%= goal_url(@goal) %>" method="post">
+    <%= auth_token %>
+    <input type="hidden" name="_method" value="patch">
+
+    <label for="title">Title</label>
+    <input type="text" name="goal[title]" id="title" value="<%= @goal.title%>">
+
+    <br>
+    <br>
+    
+    <input type="radio" name="goal[private]" value="false" id="public" <%= 'checked' unless @goal.private %>>
+    <label for="public">Public</label>
+
+    <input type="radio" name="goal[private]" value="true" id="private" <%= 'checked' if @goal.private %>>
+    <label for="private">Private</label>
+
+    <br>
+    <br>
+
+    <input type="radio" name="goal[completed]" value="false" id="ongoing" <%= 'checked' unless @goal.completed %>>
+    <label for="ongoing">Ongoing</label>
+
+    <input type="radio" name="goal[completed]" value="true" id="finished" <%= 'checked' if @goal.completed %>>
+    <label for="finished">Completed</label>
+
+    <br>
+    <br>
+
+    <label for="description">Description</label>
+    <br>
+    <textarea name="goal[description]" id="description" cols="30" rows="10"><%= 
+    @goal.description
+     %></textarea>
+
+    <br>
+
+    <input type="submit" value="Change">
+
+</form>
+
+<br>
+
+<%= link_to 'Back', goal_url(@goal) %>
