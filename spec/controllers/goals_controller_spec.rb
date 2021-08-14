@@ -158,4 +158,45 @@ RSpec.describe GoalsController, type: :controller do
     end
   end
 
+  describe "PATCH #complete" do
+    let(:user) {User.create(name:'John',password:'123456')}
+    let(:user2) {User.create(name:'Jim',password:'123456')}
+    let(:goal) {Goal.create(title:'MyGoal',description:'bla',user_id:user.id)}
+    before(:each) do 
+      user.reload
+      user2.reload
+      goal.reload
+    end
+    context "when request is sent by the author of a goal" do
+      before(:each) do
+        allow_any_instance_of(ApplicationController).
+        to receive(:current_user).and_return(user)
+        patch :complete,params:{id: goal.id}
+      end
+      it "toggles the goal's complete attribute" do 
+        goal.reload
+        expect(goal.completed).to be true
+      end
+
+      it "redirects to the goal's show page" do 
+        expect(response).to redirect_to(goal_url(goal))
+      end
+    end
+
+    context "when request is not sent by the author of a goal" do
+      before(:each) do
+        allow_any_instance_of(ApplicationController).
+        to receive(:current_user).and_return(user2)
+        patch :complete,params:{id: goal.id}
+      end
+      it "doesn't toggle the goal's complete attribute" do
+        goal.reload
+        expect(goal.completed).to be false
+      end
+      it "redirects to the goal show page" do
+        expect(response).to redirect_to(goal_url(goal))
+      end
+    end
+  end
+
 end

@@ -1,6 +1,7 @@
 class GoalsController < ApplicationController
   before_action :require_current_user,except:[:show]
   before_action :private?,only: [:show]
+  before_action :require_author , only: [:complete]
   def new
     @goal = Goal.new
     render :new
@@ -38,6 +39,13 @@ class GoalsController < ApplicationController
     render :show
   end
 
+  def complete 
+    @goal = Goal.find_by(id: params[:id])
+    @goal.toggle(:completed)
+    @goal.save
+    redirect_to goal_url(@goal)
+  end
+
   private 
 
   def goal_params
@@ -47,5 +55,10 @@ class GoalsController < ApplicationController
   def private?
     @goal = Goal.find_by(id: params[:id])
     redirect_to user_url(@goal.user_id) if @goal.private && !current_user || (current_user && current_user.id != @goal.user_id)
+  end
+
+  def require_author
+    @goal = Goal.find_by(id: params[:id]) 
+    redirect_to goal_url(@goal) if !current_user || (current_user && current_user.id != @goal.user_id)
   end
 end
