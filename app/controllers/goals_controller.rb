@@ -54,7 +54,7 @@ class GoalsController < ApplicationController
 
   def private?
     @goal = Goal.find_by(id: params[:id])
-    redirect_to user_url(@goal.user_id) if @goal.private && !current_user || (current_user && current_user.id != @goal.user_id)
+    redirect_to user_url(@goal.user_id) if @goal.private && (!current_user || (current_user && current_user.id != @goal.user_id))
   end
 
   def require_author
