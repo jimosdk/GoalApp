@@ -1,14 +1,26 @@
-<h2>Goals</h2>
+<h2><%= @user.name %>'s Profile</h2>
 
+<h3><%= @user.name %>'s Goals</h3>
+<% if @user.goals.empty? %>
+    <p>No Goals Pinned</p>
+<% else %>
 <ul>
     <% @user.goals.each do |goal| %>
-    <li><%= link_to goal.title, goal_url(goal) %></li>
+        <% if !goal.private || (goal.private && current_user.id == goal.user_id) %>
+            <li><p><%= link_to goal.title, goal_url(goal) %> 
+            (<%=goal.private ? 'Private' : 'Public' %>
+            /<%= goal.completed ? 'Completed' : 'Ongoing' %>)</p>
+            </li>
+        <% end %>
     <% end %>
 </ul>
+<% end %>
 
 <br>
 
+<% if current_user.id == @user.id %>
 <%= link_to 'New Goal', new_goal_url %>
+<% end %>
 
 <br>
 
