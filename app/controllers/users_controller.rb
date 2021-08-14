@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   before_action :require_no_current_user, except: [:show,:index]
-  #before_action :require_current_user,only: [:show]
 
   def index 
     @users = User.all 

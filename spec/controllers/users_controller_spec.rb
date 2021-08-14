@@ -66,23 +66,12 @@ RSpec.describe UsersController, type: :controller do
   describe "GET #show" do
     subject(:user) {User.create(name: 'John',password:'123456')}
     before (:each) {user.reload}
-    context "when the user is not signed in " do
-      it "redirects to Sign in page" do 
-        get :show ,params:{id: User.find_by(name:'John').id}
-        expect(response).to redirect_to(new_session_url)
-      end
+    
+    it "renders the users show page" do
+      get :show ,params:{id: User.find_by(name:'John').id}
+      expect(response).to render_template(:show)
     end
-
-    context "when the user is signed in " do
-      before(:each) do 
-        allow_any_instance_of(ApplicationController).
-        to receive(:current_user).and_return(user)
-      end
-      it "renders the users show page" do
-        get :show ,params:{id: User.find_by(name:'John').id}
-        expect(response).to render_template(:show)
-      end
-    end
+    
   end
 
 end
