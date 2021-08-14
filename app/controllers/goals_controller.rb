@@ -1,5 +1,5 @@
 class GoalsController < ApplicationController
-  before_action :require_current_user,except:[:show]
+  before_action :require_current_user
   before_action :private?,only: [:show]
   before_action :require_author , only: [:complete]
   def new
