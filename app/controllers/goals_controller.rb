@@ -1,7 +1,7 @@
 class GoalsController < ApplicationController
   before_action :require_current_user
   before_action :private?,only: [:show]
-  before_action :require_author , only: [:complete]
+  before_action :require_author , only: [:complete,:edit,:update,:destroy]
   def new
     @goal = Goal.new
     render :new
@@ -44,6 +44,13 @@ class GoalsController < ApplicationController
     @goal.toggle(:completed)
     @goal.save
     redirect_to goal_url(@goal)
+  end
+
+  def destroy
+    @goal = Goal.find_by(id: params[:id])
+    user = @goal.user
+    @goal.destroy
+    redirect_to user_url(user)
   end
 
   private 

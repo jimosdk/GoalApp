@@ -128,12 +128,16 @@ RSpec.describe GoalsController, type: :controller do
       goal2.reload
     end
     it "renders the show template" do
+      allow_any_instance_of(ApplicationController).
+      to receive(:current_user).and_return(user)
       get :show, params:{id: Goal.find_by(user_id: user.id).id}
       expect(response).to render_template(:show)
     end
 
     context "If an unsigned user is trying to access a private goal of another user" do 
       it "redirects to the other users show page" do
+        allow_any_instance_of(ApplicationController).
+      to receive(:current_user).and_return(user)
         get :show, params:{id: Goal.find_by(user_id: user2.id).id}
         expect(response).to redirect_to(user_url(user2.id))
       end
@@ -194,6 +198,46 @@ RSpec.describe GoalsController, type: :controller do
         expect(goal.completed).to be false
       end
       it "redirects to the goal show page" do
+        expect(response).to redirect_to(goal_url(goal))
+      end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    let(:user) {User.create(name:'John',password:'123456')}
+    let(:user2) {User.create(name:'Jim',password:'123456')}
+    let(:goal) {Goal.create(title:'MyGoal',description:'bla',user_id:user.id)}
+    before(:each) do 
+      user.reload
+      user2.reload
+      goal.reload
+    end
+    context "when request is sent by the author of a goal" do
+      before(:each) do
+        allow_any_instance_of(ApplicationController).
+        to receive(:current_user).and_return(user)
+        delete :destroy,params:{id: goal.id}
+      end
+      it "deletes the goal" do 
+        expect(user.goals).to_not include(goal)
+      end
+
+      it "redirects to the author's show page" do 
+        expect(response).to redirect_to(user_url(user))
+      end
+    end
+
+    context "when request is not sent by the author of a goal" do
+      before(:each) do
+        allow_any_instance_of(ApplicationController).
+        to receive(:current_user).and_return(user2)
+        delete :destroy,params:{id: goal.id}
+      end
+      it "doesn't delete the goal" do
+        user.reload
+        expect(user.goals).to include(goal)
+      end
+      it "redirects to the goal's show page" do
         expect(response).to redirect_to(goal_url(goal))
       end
     end
