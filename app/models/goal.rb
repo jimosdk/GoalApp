@@ -22,4 +22,13 @@ class Goal < ApplicationRecord
         primary_key: :id,
         foreign_key: :user_id,
         class_name: :User
+
+    has_many :comments,
+        class_name: :GoalComment,
+        dependent: :destroy
+
+    has_many :commenters,
+        ->{distinct},
+        through: :comments,
+        source: :commenter
 end
