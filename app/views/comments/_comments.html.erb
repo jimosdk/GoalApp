@@ -1,0 +1,20 @@
+<h2>Comments</h2>
+
+<ul>
+    <% comments.each do |comment| %>
+        <li>
+            <p><%= comment.body %></p>
+            <% if comment.commenter %>
+            <p><%= link_to comment.commenter.name, user_url(comment.commenter_id) %></p>
+            <% else %>
+            <p>Deleted User</p>
+            <% end %>
+            <% if current_user && current_user.id == comment.commenter_id %>
+            <%= button_to 'Delete Comment',
+             comment.is_a?(UserComment) ? user_comment_url(comment) : goal_comment_url(comment) ,
+             method: :delete%>
+            <% end %>
+        </li>
+    <% end %>
+</ul>
+

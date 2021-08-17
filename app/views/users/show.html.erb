@@ -24,4 +24,14 @@
 
 <br>
 
+<%= render 'comments/new_comment',action: user_comments_url,subject_id: @user.id %>
+
+<br>
+
+<% unless @user.comments.empty? %>
+<%= render 'comments/comments',comments: @user.comments %>
+<% end %>
+
+<br>
+
 <%= link_to 'Back to Users', users_url %>

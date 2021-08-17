@@ -1,0 +1,18 @@
+<% name =  action == user_comments_url ? "user_comment[body]" : "goal_comment[body]" %>
+<% subject = action == user_comments_url ? "user_comment[commented_id]" : "goal_comment[goal_id]" %>
+<%= render 'shared/errors' %>
+
+<form action="<%= action %>" method="post">
+    <%= auth_token %>
+
+    <input type="hidden" name="<%= subject %>" value="<%= subject_id %>">
+
+    <label for="body">New comment</label>
+    <br>
+    <textarea name= "<%=name%>" id="body" cols="30" rows="10"></textarea>
+
+    <br>
+
+    <input type="submit" value="Comment">
+
+</form>
