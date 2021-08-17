@@ -3,9 +3,9 @@
 # Table name: goals
 #
 #  id          :bigint           not null, primary key
-#  completed   :boolean          not null
+#  completed   :boolean          default(FALSE), not null
 #  description :text
-#  private     :boolean          not null
+#  private     :boolean          default(FALSE), not null
 #  title       :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
