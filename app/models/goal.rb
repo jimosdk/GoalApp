@@ -23,12 +23,15 @@ class Goal < ApplicationRecord
         foreign_key: :user_id,
         class_name: :User
 
-    has_many :comments,
-        class_name: :GoalComment,
-        dependent: :destroy
+    #Comment feature: two tables approach
+    # has_many :comments,
+    #     class_name: :GoalComment,
+    #     dependent: :destroy
 
-    has_many :commenters,
-        ->{distinct},
-        through: :comments,
-        source: :commenter
+    # has_many :commenters,
+    #     ->{distinct},
+    #     through: :comments,
+    #     source: :commenter
+
+    has_many :comments,as: :commentable
 end

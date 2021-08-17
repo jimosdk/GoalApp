@@ -25,31 +25,37 @@ class User < ApplicationRecord
 
     has_many :goals
 
-    has_many :user_comments,                     #comments on users
-        foreign_key: :commenter_id
+    # Comment feature: two tables approach
+    # has_many :user_comments,                     #comments on users
+    #     foreign_key: :commenter_id
     
-    has_many :commented_users,                  #list of users that this user has commented
-        ->{distinct},                 
-        through: :user_comments,
-        source: :commented
+    # has_many :commented_users,                  #list of users that this user has commented
+    #     ->{distinct},                 
+    #     through: :user_comments,
+    #     source: :commented
 
-    has_many :comments,                          #comments by other users
-        foreign_key: :commented_id,
-        class_name: :UserComment,
-        dependent: :destroy
+    # has_many :comments,                          #comments by other users
+    #     foreign_key: :commented_id,
+    #     class_name: :UserComment,
+    #     dependent: :destroy
 
-    has_many :commenters,                          #users that have posted a comment on this user
-        ->{distinct},
-        through: :comments,
-        source: :commenter
+    # has_many :commenters,                          #users that have posted a comment on this user
+    #     ->{distinct},
+    #     through: :comments,
+    #     source: :commenter
 
-    has_many :goal_comments,                        #list of comments on goals
-        foreign_key: :commenter_id
+    # has_many :goal_comments,                        #list of comments on goals
+    #     foreign_key: :commenter_id
 
-    has_many :commented_goals,                  #list of goals that this user has commented on
-        ->{distinct},
-        through: :goal_comments,
-        source: :goal
+    # has_many :commented_goals,                  #list of goals that this user has commented on
+    #     ->{distinct},
+    #     through: :goal_comments,
+    #     source: :goal
+
+    has_many :comments,as: :commentable
+    has_many :comment_posts,
+        foreign_key: :commenter_id,
+        class_name: :Comment
 
     def self.find_by_credentials(name,password)
         user = User.find_by(name: name)
