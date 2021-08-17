@@ -16,6 +16,8 @@
 #  index_goals_on_user_id  (user_id)
 #
 class Goal < ApplicationRecord
+    include Commentable
+
     validates :title,presence: true
 
     belongs_to :user,
@@ -33,5 +35,4 @@ class Goal < ApplicationRecord
     #     through: :comments,
     #     source: :commenter
 
-    has_many :comments,as: :commentable
 end

@@ -15,6 +15,8 @@
 #
 class User < ApplicationRecord
 
+    include Commentable 
+
     attr_reader :password
 
     validates :name,:password_digest,:session_token,presence:true
@@ -52,7 +54,6 @@ class User < ApplicationRecord
     #     through: :goal_comments,
     #     source: :goal
 
-    has_many :comments,as: :commentable
     has_many :comment_posts,
         foreign_key: :commenter_id,
         class_name: :Comment
