@@ -15,7 +15,7 @@ feature "comments on user profiles" do
     end
 
     feature "deleting a comment" do
-        let(:comment) {UserComment.create(body:"Comment body",commenter_id: user2.id,commented_id: user.id)}
+        let(:comment) {Comment.create(body:"Comment body",commenter_id: user2.id,commentable_type:'User',commentable_id: user.id)}
         before(:each) {comment.reload}
         context "when user is the author of the comment" do
             scenario "comment is removed from the commented user's show page" do
@@ -39,7 +39,7 @@ feature "comments on user profiles" do
     end
 
     context "when a commenter's profile is deleted" do
-        let(:comment) {UserComment.create(body:"Comment body",commenter_id: user2.id,commented_id: user.id)}
+        let(:comment) {Comment.create(body:"Comment body",commenter_id: user2.id,commentable_type:'User',commentable_id: user.id)}
         before(:each) do
             user2.reload
             comment.reload
@@ -77,7 +77,7 @@ feature "comments on user's goals" do
     end
 
     feature "deleting a comment" do
-        let(:comment) {GoalComment.create!(body:"Comment body",commenter_id: user2.id,goal_id: goal.id)}
+        let(:comment) {Comment.create!(body:"Comment body",commenter_id: user2.id,commentable_type:'Goal',commentable_id: goal.id)}
         before(:each) {comment.reload}
         context "when user is the author of the comment" do
             scenario "comment is removed from the commented goal's show page" do
@@ -101,7 +101,7 @@ feature "comments on user's goals" do
     end
 
     context "when a commenter's profile is deleted" do
-        let(:comment) {GoalComment.create(body:"Comment body",commenter_id: user2.id,goal_id: goal.id)}
+        let(:comment) {Comment.create(body:"Comment body",commenter_id: user2.id,commentable_type:'Goal',commentable_id: goal.id)}
         before(:each) do
             user2.reload
             comment.reload
