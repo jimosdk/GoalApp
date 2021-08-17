@@ -6,7 +6,7 @@
 <% else %>
 <ul>
     <% @user.goals.each do |goal| %>
-        <% if !goal.private || (goal.private && current_user.id == goal.user_id) %>
+        <% if !goal.private || (goal.private && current_user && current_user.id == goal.user_id) %>
             <li><p><%= link_to goal.title, goal_url(goal) %> 
             (<%=goal.private ? 'Private' : 'Public' %>
             /<%= goal.completed ? 'Completed' : 'Ongoing' %>)</p>
@@ -18,7 +18,7 @@
 
 <br>
 
-<% if current_user.id == @user.id %>
+<% if current_user && current_user.id == @user.id %>
 <%= link_to 'New Goal', new_goal_url %>
 <% end %>
 
