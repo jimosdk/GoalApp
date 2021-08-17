@@ -1,15 +1,15 @@
-<% name =  action == user_comments_url ? "user_comment[body]" : "goal_comment[body]" %>
-<% subject = action == user_comments_url ? "user_comment[commented_id]" : "goal_comment[goal_id]" %>
+
 <%= render 'shared/errors' %>
 
 <form action="<%= action %>" method="post">
     <%= auth_token %>
 
-    <input type="hidden" name="<%= subject %>" value="<%= subject_id %>">
+    <input type="hidden" name="comment[commentable_id]" value="<%= subject_id %>">
+    <input type="hidden" name="comment[commentable_type]" value="<%= subject_type %>">
 
     <label for="body">New comment</label>
     <br>
-    <textarea name= "<%=name%>" id="body" cols="30" rows="10"></textarea>
+    <textarea name= "comment[body]" id="body" cols="30" rows="10"></textarea>
 
     <br>
 

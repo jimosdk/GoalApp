@@ -10,9 +10,7 @@
             <p>Deleted User</p>
             <% end %>
             <% if current_user && current_user.id == comment.commenter_id %>
-            <%= button_to 'Delete Comment',
-             comment.is_a?(UserComment) ? user_comment_url(comment) : goal_comment_url(comment) ,
-             method: :delete%>
+            <%= button_to 'Delete Comment',comment_url(comment),method: :delete%>
             <% end %>
         </li>
     <% end %>
